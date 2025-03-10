@@ -14,16 +14,14 @@ class MosaicGenerator:
         self.mosaic = None
 
     def _find_closest_color(self, color):
-        """Находит ближайший доступный цвет."""
-        min_distance = float('inf')
-        closest_color = None
-        for available_color in self.available_colors:
-            distance = sum((c1 - c2) ** 2 for c1, c2 in zip(color, available_color))
-            if distance < min_distance:
-                min_distance = distance
-                closest_color = available_color
-        return closest_color
+        """Находит ближайший доступный цвет.""" 
+        available_colors_array = np.array(self.available_colors, dtype=np.float64)
+        color_array = np.array(color, dtype=np.float64)
+        distances = np.linalg.norm(available_colors_array - color_array, axis=1)
+        closest_color_index = np.argmin(distances)
+        return self.available_colors[closest_color_index]
 
+    
     def generate_mosaic(self):
         """Генерирует мозаику."""
         self.mosaic = np.zeros((self.mosaic_size[1], self.mosaic_size[0], 3), dtype=np.uint8)
@@ -62,20 +60,20 @@ class MosaicGenerator:
                     f.write(f"{coord}\n")
                 f.write("\n")
 
-# Пример использования
+
+
+
+
 available_colors = [
-    (255, 0, 0),   # Красный
-    (0, 255, 0),   # Зеленый
-    (0, 0, 255),   # Синий
-    (255, 255, 0), # Желтый
-    (0, 255, 255), # Голубой
-    (255, 0, 255), # Пурпурный
-    (255, 255, 255), # Белый
-    (0, 0, 0)      # Черный
+          (255, 0, 0),       # Красны
+          (255, 255, 0),     # Желтый
+          (0, 255, 0),       # Зелены
+          (255, 255, 255),   # Белый
+          (0, 0, 0)          # Черный
 ]
 
 mosaic_size = (50, 50)  # Размер мозаики в квадратиках
-canvas_size = (500, 500)  # Размер полотна для превью
+canvas_size = (1000, 1000)  # Размер полотна для превью
 
 generator = MosaicGenerator("images/image.jpg", available_colors, mosaic_size, canvas_size)
 generator.show_preview()
