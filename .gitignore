@@ -171,3 +171,4 @@ cython_debug/
 .pypirc
 /images/image.jpg
 /instructions.txt
+/images/
